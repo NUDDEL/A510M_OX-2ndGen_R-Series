@@ -95,8 +95,6 @@ static struct {
 	 * clock divider for SCLK_CPU_PLL, SCLK_HPM_CPU
 	 * PLL M, P, S
 	 */
-	APLL_FREQ(1600000, 0, 0, 7, 7, 2, 7, 3, 7, 7, 246, 4, 0),
-	APLL_FREQ(1500000, 0, 0, 7, 7, 2, 7, 3, 7, 7, 230, 4, 0),
 	APLL_FREQ(1400000, 0, 0, 7, 7, 2, 7, 3, 7, 7, 216, 4, 0),
 	APLL_FREQ(1300000, 0, 0, 7, 7, 2, 7, 3, 6, 7, 200, 4, 0),
 	APLL_FREQ(1200000, 0, 0, 7, 7, 2, 7, 3, 6, 7, 368, 4, 1),
@@ -112,8 +110,6 @@ static struct {
 };
 
 static unsigned int exynos_bus_table[] = {
-	825000, /* 1.6GHz */
-	825000, /* 1.5GHz */
 	825000, /* 1.4GHz */
 	825000, /* 1.3GHz */
 	728000, /* 1.2GHz */
@@ -914,21 +910,21 @@ static int exynos_cpufreq_init(struct cpufreq_policy *policy)
 	voltage_tolerance = exynos_get_voltage_tolerance(cpu_dev);
 	policy->cur = exynos_cpufreq_get(policy->cpu);
 	/* Later this code will be removed. This is for first lot */
-	policy->cpuinfo.min_freq = 400000;
+	policy->cpuinfo.min_freq = 300000;
 	freq_table[cur_cluster][13].frequency = CPUFREQ_ENTRY_INVALID;
 
 	if (samsung_rev() == EXYNOS7580_REV_0) {
 		if (!support_full_frequency())
 			policy->cpuinfo.max_freq = 800000;
 		else
-			policy->cpuinfo.max_freq = 1400000;
+			policy->cpuinfo.max_freq = 1000000;
 	} else if (soc_is_exynos7580_v1()) {
-		policy->cpuinfo.max_freq = 1500000;
+		policy->cpuinfo.max_freq = 1400000;
 		freq_table[cur_cluster][0].frequency = CPUFREQ_ENTRY_INVALID;
 	}
 
 	if (soc_is_exynos7580_v1())
-		policy->cpuinfo.max_freq = 1500000;
+		policy->cpuinfo.max_freq = 1400000;
 
 	cpumask_copy(policy->cpus, topology_core_cpumask(policy->cpu));
 
